@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	httpserver "dutygram/api/http"
 	"dutygram/cmd/go-dutygram/config"
+	httpserver "dutygram/internal/api/http"
 	"fmt"
 	"github.com/go-telegram/bot"
 	"github.com/jessevdk/go-flags"

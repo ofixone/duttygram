@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db:
+    build:
+      context: ../../src/tarantool
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./.data:/var/lib/tarantool:rw
+    command: [ "tarantool", "/opt/tarantool/app.lua" ]
+    environment:
+      - TNT_RUN_MIGRATIONS=true
+  db-admin:
+    image: quay.io/basis-company/tarantool-admin
+    ports:
+      - "8000:80"
+    environment:
+      - TARANTOOL_CONNECTIONS=tarantool:tarantool@db:3301
