@@ -1,7 +1,5 @@
 #!/usr/bin/env tarantool
 
--- Возвращает переменную окружения
--- или значение по-умолчанию, если переменная окружения не задана
 local function getEnv(key, default)
     local value = os.getenv(key)
     if value == nil then
@@ -12,29 +10,13 @@ local function getEnv(key, default)
 end
 
 local config = {
-    --- Лимит потребления памяти (в байтах)
-    --- @type number
     memory_limit = tonumber(getEnv("TNT_MEMORY_LIMIT", 512 * 1024 * 1024)),
-    --- Порт приложения
-    --- @type number
     listen = tonumber(getEnv("TNT_LISTEN", 3301)),
-    --- Уровень логирования
-    --- @type number
     log_level = tonumber(getEnv("TNT_LOG_LEVEL", 2)),
-    --- Формат логирования
-    --- @type string
     log_format = getEnv("TNT_LOG_FORMAT", "json"),
-    --- Пользователь
-    --- @type string
     user = getEnv("TNT_USER", "tarantool"),
-    --- Пароль пользователя
-    --- @type string
     password = getEnv("TNT_PASSWORD", "tarantool"),
-    --- Пользователь для миграций
-    --- @type string
     migration_user = getEnv("TNT_MIGRATION_USER", "migrator"),
-    --- Пароль пользователя для миграций
-    --- @type string
     migration_password = getEnv("TNT_MIGRATION_PASSWORD", "migrator"),
 }
 
@@ -79,9 +61,7 @@ function backup_stop()
     return box.backup.stop()
 end
 
---- Глобальная переменная, при помощи которой внешнее приложение будет вызывать методы API
 API = require("api")
---- Глобальная переменная с мигратором
 migrator = require("migrations/migrator")
 
 local run_migrations = os.getenv("TNT_RUN_MIGRATIONS")

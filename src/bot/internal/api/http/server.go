@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	tarantoolwrapper "dutygram/pkg/tarantool"
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"log/slog"
@@ -9,10 +10,11 @@ import (
 
 type Server struct {
 	logger *slog.Logger
+	db     *tarantoolwrapper.Wrapper
 }
 
-func NewServer(logger *slog.Logger) *Server {
-	return &Server{logger: logger}
+func NewServer(logger *slog.Logger, db *tarantoolwrapper.Wrapper) *Server {
+	return &Server{logger: logger, db: db}
 }
 
 func (s *Server) HandleWebhook(_ context.Context, _ *bot.Bot, update *models.Update) {
