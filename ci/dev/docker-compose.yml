@@ -14,6 +14,6 @@ services:
   db-admin:
     image: quay.io/basis-company/tarantool-admin
     ports:
-      - "8001:80"
+      - "8000:80"
     environment:
       - TARANTOOL_CONNECTIONS=tarantool:tarantool@db:3301

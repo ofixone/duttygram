@@ -1,4 +1,4 @@
-module dutygram
+module duttygram
 
 go 1.22
 

@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
-	"dutygram/cmd/go-dutygram/config"
-	httpserver "dutygram/internal/api/http"
-	logprettier "dutygram/pkg/log"
-	tarantoolwrapper "dutygram/pkg/tarantool"
+	"duttygram/cmd/go-dutygram/config"
+	"duttygram/internal"
+	httpserver "duttygram/internal/api/http"
+	"duttygram/internal/tarantool"
+	logprettier "duttygram/pkg/log"
+	tarantoolwrapper "duttygram/pkg/tarantool"
 	"fmt"
 	"github.com/go-telegram/bot"
 	"github.com/jessevdk/go-flags"
@@ -47,11 +49,14 @@ func main() {
 			"listen",
 			cfg.ListenHTTP,
 		), slog.Any("telegram", cfg.Telegram))
-		server := httpserver.NewServer(log, db)
+		server := httpserver.NewServer(log, internal.NewStateFactory(
+			tarantool.NewEntityRepository(db),
+			internal.NewScenario(),
+		))
 		b = initTelegramBot(ctx, telegramOpts{
 			token:      cfg.Telegram.Token,
 			webhookUri: cfg.Telegram.WebhookUri,
-		}, server.HandleWebhook, env == local)
+		}, server.HandleTelegramWebhook, env == local)
 		log.Debug("successfully started telegram bot")
 	}()
 
